@@ -12,13 +12,16 @@ import json
 import sys
 from pathlib import Path
 
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from dotenv import load_dotenv
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 from loguru import logger
 
 # Project root on sys.path
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
+
+load_dotenv()
 
 from config import get_config, get_database_url
 from retrieval.embeddings import get_embeddings

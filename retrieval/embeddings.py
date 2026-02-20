@@ -7,7 +7,6 @@ Supports two providers (configured in config.yaml):
 Returns a LangChain Embeddings object compatible with all LangChain retrievers.
 """
 
-from functools import lru_cache
 from typing import TYPE_CHECKING
 
 from config import Config
@@ -15,30 +14,36 @@ from config import Config
 if TYPE_CHECKING:
     from langchain_core.embeddings import Embeddings
 
+_embeddings_instance = None
 
-@lru_cache(maxsize=1)
+
 def get_embeddings(cfg: Config) -> "Embeddings":
     """Return a cached embedding model instance."""
+    global _embeddings_instance
+    if _embeddings_instance is not None:
+        return _embeddings_instance
     provider = cfg.embeddings.provider
 
     if provider == "ollama":
         from langchain_ollama import OllamaEmbeddings
 
-        return OllamaEmbeddings(
+        _embeddings_instance = OllamaEmbeddings(
             base_url=cfg.ollama.base_url,
             model=cfg.ollama.embed_model,
         )
+        return _embeddings_instance
 
     if provider == "sentence_transformers":
         try:
             from langchain_community.embeddings import HuggingFaceEmbeddings
 
-            return HuggingFaceEmbeddings(
+            _embeddings_instance = HuggingFaceEmbeddings(
                 model_name=cfg.embeddings.st_model,
                 model_kwargs={"device": cfg.embeddings.st_device},
                 encode_kwargs={"normalize_embeddings": True},
                 cache_folder=cfg.embeddings.st_cache_dir,
             )
+            return _embeddings_instance
         except ImportError as e:
             raise RuntimeError(
                 "sentence-transformers is not installed. "
