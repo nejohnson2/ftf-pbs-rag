@@ -113,7 +113,7 @@ class RAGChain:
         response = await chain.ainvoke(prompt_input)
         answer = response.content if hasattr(response, "content") else str(response)
 
-        logger.info(f"Generated answer ({len(answer)} chars) from {len(docs)} chunks.")
+        logger.info(f"Generated answer ({len(answer)} chars) from {len(docs)} chunks.\n{answer}")
 
         return RAGResult(
             answer=answer,
