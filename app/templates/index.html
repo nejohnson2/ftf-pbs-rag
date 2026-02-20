@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ title }}</title>
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h1>FTF PBS<br>Reports</h1>
+      <p class="subtitle">{{ description }}</p>
+    </div>
+
+    <div class="sidebar-section">
+      <h2>Documents</h2>
+      <div
+        id="doc-list"
+        hx-get="/documents/list"
+        hx-trigger="load"
+        hx-swap="innerHTML"
+      >
+        <p class="loading">Loading documents…</p>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <p>Powered by <a href="https://ollama.com" target="_blank">Ollama</a></p>
+    </div>
+  </aside>
+
+  <!-- ── Main chat area ── -->
+  <main class="chat-area">
+    <div class="chat-header">
+      <h2>Ask about the surveys</h2>
+      <p>Ask about food security, nutrition, or poverty indicators across countries and survey rounds.</p>
+    </div>
+
+    <!-- Message thread -->
+    <div class="messages" id="messages">
+      <div class="message assistant-message welcome">
+        <div class="message-body">
+          <p>Hello! I can help you explore Feed the Future Population-Based Survey reports from
+          20 countries. You can ask about specific countries, compare baseline vs. endline results,
+          or look up indicators like stunting rates, dietary diversity, or poverty headcount.</p>
+          <p><em>Example questions:</em></p>
+          <ul>
+            <li>What were the stunting rates in Kenya at baseline vs. endline?</li>
+            <li>Compare child hunger across Ethiopia and Uganda in Phase 2.</li>
+            <li>What progress was made on women's dietary diversity in Bangladesh?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input form -->
+    <form
+      id="chat-form"
+      hx-post="/chat"
+      hx-target="#messages"
+      hx-swap="beforeend"
+      hx-on::after-request="this.reset(); scrollToBottom(); setLoading(false);"
+      hx-on::before-request="setLoading(true);"
+    >
+      <div class="input-row">
+        <textarea
+          name="query"
+          id="query-input"
+          placeholder="Ask a question about the survey reports…"
+          rows="2"
+          required
+          autocomplete="off"
+        ></textarea>
+        <button type="submit" id="submit-btn" aria-label="Send">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+      <p class="hint">Press Ctrl+Enter to send</p>
+    </form>
+
+  </main>
+</div>
+
+<script src="/static/js/chat.js"></script>
+</body>
+</html>

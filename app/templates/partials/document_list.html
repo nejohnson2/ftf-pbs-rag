@@ -1,0 +1,27 @@
+{% if by_country %}
+  {% for country, docs in by_country | dictsort %}
+  <details class="country-group">
+    <summary>{{ country }} <span class="doc-count">({{ docs | length }})</span></summary>
+    <ul class="doc-list">
+      {% for doc in docs %}
+      <li class="doc-item">
+        {% if doc.online_url %}
+          <a href="{{ doc.online_url }}" target="_blank" rel="noopener" class="doc-link">
+            {{ doc.title or doc.doc_id }}
+          </a>
+        {% else %}
+          <span class="doc-link no-link">{{ doc.title or doc.doc_id }}</span>
+        {% endif %}
+        <span class="doc-tags">
+          {% if doc.phase %}<span class="tag">P{{ doc.phase }}</span>{% endif %}
+          {% if doc.survey_type %}<span class="tag">{{ doc.survey_type | replace('_',' ') | title }}</span>{% endif %}
+          {% if doc.year %}<span class="tag">{{ doc.year }}</span>{% endif %}
+        </span>
+      </li>
+      {% endfor %}
+    </ul>
+  </details>
+  {% endfor %}
+{% else %}
+  <p class="no-docs">No documents indexed yet. Run the preprocessing pipeline first.</p>
+{% endif %}

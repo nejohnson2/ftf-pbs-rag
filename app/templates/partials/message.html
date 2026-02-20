@@ -1,0 +1,46 @@
+<!-- User message -->
+<div class="message user-message">
+  <div class="message-body">
+    <p>{{ query }}</p>
+  </div>
+</div>
+
+<!-- Assistant message -->
+<div class="message assistant-message">
+  <div class="message-body">
+    {% if error %}
+      <p class="error-text">⚠ {{ error }}</p>
+    {% else %}
+      <div class="answer-text">{{ answer | replace('\n', '<br>') | safe }}</div>
+
+      {% if citations %}
+      <div class="citations">
+        <h4>Sources</h4>
+        {% for c in citations %}
+        <div class="citation">
+          <span class="citation-number">[{{ c.number }}]</span>
+          <div class="citation-meta">
+            <strong>
+              {% if c.online_url %}
+                <a href="{{ c.online_url }}" target="_blank" rel="noopener">{{ c.title }}</a>
+              {% else %}
+                {{ c.title }}
+              {% endif %}
+            </strong>
+            <span class="citation-tags">
+              {% if c.country %}<span class="tag">{{ c.country }}</span>{% endif %}
+              {% if c.phase %}<span class="tag">Phase {{ c.phase }}</span>{% endif %}
+              {% if c.survey_type %}<span class="tag">{{ c.survey_type | replace('_', ' ') | title }}</span>{% endif %}
+              {% if c.year %}<span class="tag">{{ c.year }}</span>{% endif %}
+              {% if c.doc_type == 'key_findings' %}<span class="tag tag-kf">Key Findings</span>{% endif %}
+              {% if c.doc_type == 'reference' %}<span class="tag tag-ref">Reference</span>{% endif %}
+            </span>
+            <p class="citation-excerpt">{{ c.excerpt }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>

@@ -1,0 +1,13 @@
+# ============================================================
+# Ingestion / preprocessing dependencies — run locally only
+# NOT installed on Heroku (too large for slug)
+# ============================================================
+
+# Include runtime deps too
+-r requirements.txt
+
+# OCR and document processing
+docling>=2.5.0
+
+# Cross-encoder reranking (optional, enable_reranker: true in config)
+sentence-transformers>=3.3.0

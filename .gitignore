@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# Environment
+.env
+
+# Model cache
+.model_cache/
+
+# Logs (keep directory, not contents)
+logs/*.jsonl
+logs/*.log
+
+# Data — processed markdown can be large; commit metadata.json but not markdown
+data/processed/markdown/*.md
+Arcived Pop
+Archived Population-Based Survey Reports/
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/

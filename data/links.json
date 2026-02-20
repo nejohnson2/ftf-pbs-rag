@@ -1,0 +1,6 @@
+{
+  "_comment": "Optional: map doc_id to an online URL. These are merged into metadata.json by scripts/preprocess.py if 'online_url' is not already set.",
+  "links": {
+    "example_doc_id": "https://www.dropbox.com/your-link-here"
+  }
+}
