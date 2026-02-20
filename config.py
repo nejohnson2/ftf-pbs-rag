@@ -132,6 +132,11 @@ def get_database_url() -> str:
     # Heroku returns postgres:// but SQLAlchemy requires postgresql://
     if url.startswith("postgres://"):
         url = url.replace("postgres://", "postgresql://", 1)
+    # Heroku Postgres requires SSL; add sslmode=require for non-local connections
+    if "localhost" not in url and "127.0.0.1" not in url:
+        if "sslmode" not in url:
+            sep = "&" if "?" in url else "?"
+            url = f"{url}{sep}sslmode=require"
     return url
 
 
