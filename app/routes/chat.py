@@ -7,6 +7,8 @@ GET  /      — serve the main chat page
 import json
 from typing import Annotated, Optional
 
+import markdown as md
+
 from fastapi import APIRouter, Cookie, Form, Request, Response
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
@@ -98,13 +100,16 @@ async def chat(
             docs_cited=docs_cited,
         )
 
+    # Render markdown to HTML for display
+    answer_html = md.markdown(answer, extensions=["tables", "fenced_code"])
+
     # Return HTML fragment for HTMX to append
     return templates.TemplateResponse(
         "partials/message.html",
         {
             "request": request,
             "query": query,
-            "answer": answer,
+            "answer": answer_html,
             "citations": citations,
             "error": error,
         },

@@ -11,7 +11,7 @@
     {% if error %}
       <p class="error-text">⚠ {{ error }}</p>
     {% else %}
-      <div class="answer-text">{{ answer | replace('\n', '<br>') | safe }}</div>
+      <div class="answer-text">{{ answer | safe }}</div>
 
       {% if citations %}
       <div class="citations">
